@@ -1,0 +1,149 @@
+body {
+  background: #000;
+  color: #00e5c8;
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+}
+
+/* Bienvenue */
+.welcome {
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.flag {
+  font-size: 3rem;
+  color: #00e5c8;
+  text-shadow: 0 0 10px #00e5c8;
+  animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Icônes sociaux */
+.social-icons {
+  text-align: center;
+  padding: 20px;
+}
+
+.social-icons i {
+  color: #00e5c8;
+  font-size: 2rem;
+  margin: 0 15px;
+  transition: 0.3s;
+}
+
+.social-icons i:hover {
+  color: #ff00ff;
+  transform: scale(1.2);
+}
+
+/* Sections */
+.section {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #00e5c8;
+}
+
+/* Cartes */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  display: flex;
+  width: 1000px;
+  height: 190px;
+  background: #111;
+  border: 1px solid #00e5c8;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 15px auto;
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px #00e5c8;
+}
+
+.card-image {
+  flex: 0 0 40%;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-desc {
+  flex: 0 0 60%;
+  padding: 20px;
+  background: #000;
+  color: #00e5c8;
+}   
+
+.card-desc h3 {
+  margin: 0 0 10px;
+  color: #00e5c8;
+}
+
+.card-desc p {
+  margin: 0;
+  color: #aaa;
+  font-size: 0.9rem;
+}   
+.project-container {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 20px;
+  color: #00e5c8;
+  font-family: 'Courier New', monospace;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideIn 1s ease-out 0.3s forwards;
+}
+
+@keyframes slideIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.project-img {
+  width: 100%;
+  border: 1px solid #00e5c8;
+  border-radius: 8px;
+  margin: 20px 0;
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.back {
+  color: #00e5c8;
+  text-decoration: none;
+}   

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="images/icone.jpg" type="image/png">   
+  <title>Mon Portfolio Cyber</title>
+  <link rel="stylesheet" href="stylr.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Bienvenue -->
+  <div class="welcome">
+    <h1 class="typewriter">Hey, I'm Ayoub{WELCOME} </h1>Copied!   
+    <p>Explorez mes projets et CTF en cybersécurité.</p>
+  </div>
+
+  <!-- Icônes dynamiques -->
+  <div class="social-icons">
+    <a href="https://www.linkedin.com/in/ayoub-kb/" target="_blank"><i class="fab fa-linkedin"></i></a>
+    <a href="https://github.com/AYOUB-KB" target="_blank"><i class="fab fa-github"></i></a>
+  </div>
+
+  <!-- Section Projets -->
+  <section id="projets" class="section">
+    <h2>🛠️ Mes Projets</h2>
+    <div class="cards">
+      <div class="card" onclick="window.location='projets/projet.html'">
+        <div class="card-image">
+          <img src="images/1.png" alt="Projet 1" />
+        </div>
+        <div class="card-desc">
+          <h3>Firewall maison</h3>
+          <p>Setup d’un firewall avec pfSense. Analyse de trafic et règles de sécurité.</p>
+        </div>
+      </div>
+      <div class="card" onclick="window.location='projet2.html'">
+        <div class="card-image">
+        <img src="images/3.png" alt="Projet 2" />
+        </div>
+        <div class="card-desc">
+          <h3>Scan de vulnérabilités</h3>
+          <p>Utilisation de Nessus pour auditer un réseau.</p>
+        </div>
+      </div>    
+</div>
+    </div>
+  </section>
+
+  <!-- Section CTF -->
+  <section id="ctfs" class="section">
+    <h2> 🚩 Mes CTF</h2>
+    <div class="cards">
+      <div class="card" onclick="window.location='ctf1.html'">
+        <div class="card-image">
+          <img src="ctf1.jpg" alt="CTF 1" />
+        </div>
+        <div class="card-desc">
+          <h3>TryHackMe - Buffer Overflow</h3>
+          <p>Exploitation d’un service vulnérable avec retour sur shell.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>   
