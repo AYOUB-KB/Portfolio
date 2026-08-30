@@ -6,7 +6,8 @@
   <title>CTF - KERBEROASTING</title>
   <link rel="stylesheet" href="../stylr.css" />
 </head>
-<body> <div class="project-container"> <style> h3 { font-family: 'Courier New', monospace; color: #00e5c8; } .question-block { font-family: 'Courier New', monospace; color: #00e5c8; background-color: rgba(0, 229, 200, 0.05); padding: 15px; margin: 15px 0; white-space: pre-line; } </style> <h3>A simple question about Pthreads that made me think differently about IT</h3> <p> So recently I was curious about C, and I decided to start a small course just to become a little bit more familiar with the language. </p> <p> At some point, I arrived at Pthreads. </p> <p> Pthreads are related to POSIX Threads and basically allow a program to have multiple threads running concurrently inside the same process. </p> <p> At first, I understood it in a very simple way. </p> <p> Multiple tasks can run at the same time. </p> <div class="question-block"> Without threads
+<body> <div class="project-container"> <style> h3 { font-family: 'Courier New', monospace; color: #00e5c8; } .question-block { font-family: 'Courier New', monospace; color: #00e5c8; background-color: rgba(0, 229, 200, 0.05); padding: 15px; margin: 15px 0; white-space: pre-line; } </style> <h3>A simple question about Pthreads that made me think differently about IT</h3> <p> So recently I was curious about C, and I decided to start a small course just to become a little bit more familiar with the language. </p> <p> At some point, I arrived at Pthreads. </p> <p> Pthreads are related to POSIX Threads and basically allow a program to have multiple threads running concurrently inside the same process. </p> <p> At first, I understood it in a very simple way. </p> <p> Multiple tasks can run at the same time. </p> 
+<div class="question-block"> Without threads
 
 Task 1
 
@@ -20,11 +21,47 @@ Thread 1: Task 1
 Thread 2: Task 2
 Thread 3: Task 3
 
-</div> <p> Cool. </p> <p> But then I asked myself something. </p> <p> Wait... if I create multiple threads, doesn't that affect the RAM? </p> <p> And honestly, that question is what made me write this article 😂 </p> <p> Because after asking that question, I started questioning the question itself. </p> <p> Why did I ask that? </p> <p> And then I realized that I sometimes do this naturally when learning IT. </p> <p> Someone explains a technology and tells me how to use it. </p> <p> But my brain sometimes goes: </p> <p> Okay... but what happens if I actually use it? </p> <p> Not just, does it work? </p> <p> But what else does it affect? </p> <p> And I think this way of thinking is something really interesting in IT. </p> <p> I'm definitely not an expert, by the way. There are probably people with much more experience than me reading this. I'm mostly writing this to share my thoughts and also to keep track of what I'm learning. </p> <h3>It's not only about Pthreads</h3> <p> My original question was about RAM and threads. But then I realized that the same logic can be applied almost everywhere in IT. </p> <p> Let's imagine you're a System Administrator. </p> <p> You have a simple objective. You want to block port 80 in the firewall. </p> <p> You do it. </p> <div class="question-block"> Firewall rule
+</div> <p> Cool. </p> <p> But then I asked myself something. </p> 
+<p> Wait... if I create multiple threads, doesn't that affect the RAM? </p> 
+<img src="images/3.png" alt="schema" style="max-width: 100%; height: auto;" /> 
+  
+
+<p> And honestly, that question is what made me write this article 😂 </p> 
+<p> Because after asking that question, I started questioning the question itself. </p> 
+<p> Why did I ask that? </p> <p> And then I realized that I sometimes do this naturally when learning IT. </p> 
+<p> Someone explains a technology and tells me how to use it. </p> <p> But my brain sometimes goes: </p> 
+<p> Okay... but what happens if I actually use it? </p> <p> Not just, does it work? </p> 
+<p> But what else does it affect? </p> 
+<p> And I think this way of thinking is something really interesting in IT. </p> 
+<p> I'm definitely not an expert, by the way. There are probably people with much more experience than me reading this. I'm mostly writing this to share my thoughts and also to keep track of what I'm learning. </p> 
+<h3>It's not only about Pthreads</h3> 
+<p> My original question was about RAM and threads. But then I realized that the same logic can be applied almost everywhere in IT. </p> 
+<p> Let's imagine you're a System Administrator. </p> 
+<p> You have a simple objective. You want to block port 80 in the firewall. </p> 
+<p> You do it. </p> 
+
+<div class="question-block"> Firewall rule
 
 Block port 80
 
-</div> <p> The rule works. </p> <p> Mission accomplished, right? 🎉 </p> <p> Well... maybe. </p> <p> As a beginner, I think it's easy to only look at the direct result. </p> <p> I wanted to block port 80. </p> <p> Port 80 is blocked. </p> <p> Great. </p> <p> But then you can start asking other questions. </p> <h3>What did I actually change?</h3> <p> I blocked port 80 in the firewall. </p> <p> Simple. </p> <p> But a firewall rule is part of a bigger system. </p> <p> So now the next question becomes, what is using this? </p> <div class="question-block"> Web server?
+</div> <p> The rule works. </p> 
+<p> Mission accomplished, right? 🎉 </p> 
+<p> Well... maybe. </p> 
+<p> As a beginner, I think it's easy to only look at the direct result. </p> 
+<p> I wanted to block port 80. </p> 
+<p> Port 80 is blocked. </p>
+ <p> Great. </p> 
+ <p> But then you can start asking other questions. </p> 
+
+<img src="images/5.png" alt="schema" style="max-width: 100%; height: auto;" /> 
+
+ <h3>What did I actually change?</h3> 
+ <p> I blocked port 80 in the firewall. </p> 
+ <p> Simple. </p> 
+ <p> But a firewall rule is part of a bigger system. </p> 
+ <p> So now the next question becomes, what is using this? </p> 
+ 
+ <div class="question-block"> Web server?
 
 Reverse proxy?
 
@@ -36,7 +73,12 @@ API?
 
 Other services?
 
-</div> <p> Maybe blocking port 80 does exactly what you wanted. </p> <p> But maybe something else was depending on it. </p> <h3>What depends on it?</h3> <p> Sometimes the problem isn't directly visible. </p> <div class="question-block"> Service A
+</div> 
+<p> Maybe blocking port 80 does exactly what you wanted. </p> 
+<p> But maybe something else was depending on it. </p> 
+<h3>What depends on it?</h3> 
+<p> Sometimes the problem isn't directly visible. </p> 
+<div class="question-block"> Service A
 
 depends on
 
@@ -46,7 +88,15 @@ depends on
 
 Service C
 
-</div> <p> You change something in Service A. </p> <p> Then Service C suddenly stops working. </p> <p> And you're thinking, wait... I didn't even touch Service C. </p> <p> But that's exactly the point. </p> <p> Systems are connected. </p> <p> One thing can affect another thing indirectly. </p> <h3>What could go wrong?</h3> <p> Another question I think is useful is, what's the worst-case scenario? </p> <div class="question-block"> Website inaccessible?
+</div> <p> You change something in Service A. </p> 
+<p> Then Service C suddenly stops working. </p> 
+<p> And you're thinking, wait... I didn't even touch Service C. </p> 
+<p> But that's exactly the point. </p> 
+<p> Systems are connected. </p> 
+<p> One thing can affect another thing indirectly. </p> 
+<h3>What could go wrong?</h3> 
+<p> Another question I think is useful is, what's the worst-case scenario? </p> 
+<div class="question-block"> Website inaccessible?
 
 Production service broken?
 
@@ -56,7 +106,12 @@ Monitoring stops working?
 
 Remote access lost?
 
-</div> <p> I'm not saying we should be scared to make changes. </p> <p> Otherwise, we would never touch anything 😂. </p> <p> But understanding what could happen before making a change seems like a good habit. </p> <h3>And how do I go back?</h3> <p> This is another thing I think about. </p> <div class="question-block"> Something goes wrong.
+</div> <p> I'm not saying we should be scared to make changes. </p> 
+<p> Otherwise, we would never touch anything 😂. </p> 
+<p> But understanding what could happen before making a change seems like a good habit. </p> 
+<h3>And how do I go back?</h3> 
+<p> This is another thing I think about. </p> 
+<div class="question-block"> Something goes wrong.
 
 Can I undo it?
 
@@ -64,7 +119,16 @@ Do I have a backup?
 
 Do I have a rollback plan?
 
-</div> <p> Sometimes the change itself is easy. </p> <p> The difficult part is recovering when something unexpected happens. </p> <h3>So what does this have to do with Pthreads?</h3> <p> Let's go back to my original question. </p> <p> Will Pthreads affect RAM? </p> <p> Someone tells you that threads allow multiple tasks to run concurrently. </p> <p> Okay. </p> <p> But then you can start asking yourself more questions. </p> <div class="question-block"> What happens if I create one thread?
+</div> 
+<p> Sometimes the change itself is easy. </p>
+<p> The difficult part is recovering when something unexpected happens. </p> 
+<h3>So what does this have to do with Pthreads?</h3> 
+<p> Let's go back to my original question. </p> 
+<p> Will Pthreads affect RAM? </p> 
+<p> Someone tells you that threads allow multiple tasks to run concurrently. </p> 
+<p> Okay. </p> 
+<p> But then you can start asking yourself more questions. </p> 
+<div class="question-block"> What happens if I create one thread?
 
 What about 10?
 
@@ -74,7 +138,9 @@ What about 10?
 
 10,000?
 
-</div> <p> Then more questions start appearing. </p> <div class="question-block"> Does every thread use memory?
+</div> 
+<p> Then more questions start appearing. </p> 
+<div class="question-block"> Does every thread use memory?
 
 How much memory?
 
@@ -90,7 +156,22 @@ Can they interfere with each other?
 
 Can something break?
 
-</div> <p> And that's basically the connection I was thinking about. </p> <p> The question isn't only how do I use this? </p> <p> It's also, what happens when I use this? </p> <p> And maybe, what else can this affect? </p> <h3>The mindset I'm trying to develop</h3> <p> I don't know if there is one perfect name for this. </p> <p> Maybe it's related to Systems Thinking. </p> <p> Maybe it's Critical Thinking. </p> <p> Maybe it's thinking about dependencies. </p> <p> Maybe it's thinking about consequences and implications. </p> <p> Probably a mix of all of them. </p> <p> But the general idea is simple. </p> <p> When I'm learning something new in IT, I want to start asking myself questions. </p> <div class="question-block"> What does this actually do?
+</div> <p> And that's basically the connection I was thinking about. </p> 
+<p> The question isn't only how do I use this? </p> 
+<p> It's also, what happens when I use this? </p> 
+<p> And maybe, what else can this affect? </p> 
+<h3>The mindset I'm trying to develop</h3> 
+
+<p> I don't know if there is one perfect name for this. </p> 
+<p> Maybe it's related to Systems Thinking. </p> 
+<p> Maybe it's Critical Thinking. </p> 
+<p> Maybe it's thinking about dependencies. </p> 
+<p> Maybe it's thinking about consequences and implications. </p> 
+<p> Probably a mix of all of them. </p> 
+<p> But the general idea is simple. </p> 
+<p> When I'm learning something new in IT, I want to start asking myself questions. </p> 
+
+<div class="question-block"> What does this actually do?
 
 What does it change?
 
@@ -108,4 +189,24 @@ What happens if I scale this?
 
 How can I recover if something breaks?
 
-</div> <p> Of course, you don't need to overthink absolutely everything. </p> <p> You don't need to make a complete analysis before doing something simple 😂. </p> <p> But when you're working with systems, networks, servers, security, or programming, I think these questions can become really useful. </p> <h3>Final thought</h3> <p> This whole article started with a very simple question. </p> <p> Will Pthreads affect RAM? </p> <p> And somehow, that small question made me think about something much bigger. </p> <p> When learning IT, I don't only want to know what something does. </p> <p> I also want to know what happens behind it. </p> <p> What are the consequences? </p> <p> What else could this affect? </p> <p> Maybe that's Systems Thinking. </p> <p> Maybe it's Critical Thinking. </p> <p> Maybe it's just asking better questions. </p> <p> I don't know yet. </p> <p> But I think it's a habit worth developing. </p> <h3> Don't only learn how to use something. Try to understand what happens when you use it. </h3> <a href="../index.html" class="back" style="color:#00e5c8; text-shadow:0 0 5px #00e5c8; transition:0.3s;"> ← Back Home </a> </div> </body> </html>
+</div> <p> Of course, you don't need to overthink absolutely everything. </p> 
+<p> You don't need to make a complete analysis before doing something simple 😂. </p> 
+<p> But when you're working with systems, networks, servers, security, or programming, I think these questions can become really useful. </p> 
+<h3>Final thought</h3> <p> This whole article started with a very simple question. </p> 
+<p> Will Pthreads affect RAM? </p> <p> And somehow, that small question made me think about something much bigger. </p> 
+<p> When learning IT, I don't only want to know what something does. </p> 
+<p> I also want to know what happens behind it. </p> 
+<p> What are the consequences? </p> 
+<p> What else could this affect? </p> 
+<p> Maybe that's Systems Thinking. </p> 
+<p> Maybe it's Critical Thinking. </p> 
+<p> Maybe it's just asking better questions. </p> 
+<p> I don't know yet. </p> 
+<p> But I think it's a habit worth developing. </p> 
+<img src="images/7.png" alt="schema" style="max-width: 100%; height: auto;" /> 
+ 
+<h3> Don't only learn how to use something. Try to understand what happens when you use it. </h3> 
+<a href="../index.html" class="back" style="color:#00e5c8; text-shadow:0 0 5px #00e5c8; transition:0.3s;"> ← Back Home </a> 
+</div> 
+</body> 
+</html>
