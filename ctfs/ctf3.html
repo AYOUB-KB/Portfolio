@@ -19,6 +19,7 @@ I was given an IP address, a port and a zip file. The goal was to disarm a custo
 
     <p>So I searched a bit and I found that there are multiple types of rootkits (a rootkit is a kind of backdoor):</p>
 
+    <img src="images/44.png" alt="Ghidra" width="500" height="250" />
     <p><strong>BIOS/UEFI/initrd Backdoors:</strong><br>
         These are the most dangerous as they are installed at the BIOS level, allowing them to bypass standard security measures and even survive a complete reinstallation of the operating system. Removing them typically requires reflashing the BIOS.
     </p>
@@ -63,6 +64,7 @@ I was given an IP address, a port and a zip file. The goal was to disarm a custo
         cmp eax, 0x2E (new visibility toggle, corresponds to kill -46)<br>
         Testing kill -64 0 gives root access, so the attacker modified the rootkit to use different signals.
     </p>
+    <img src="images/33.png" alt="Ghidra" width="500" height="250" />
 
     <p><strong>Removing the Rootkit</strong><br>
         Gain root access:<br>
