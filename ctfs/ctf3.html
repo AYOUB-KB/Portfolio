@@ -20,21 +20,6 @@ I was given an IP address, a port and a zip file. The goal was to disarm a custo
     <p>So I searched a bit and I found that a rootkit is malware designed to hide its own presence (and often an attacker's access) on a system. It is frequently used together with a backdoor: the backdoor gives the access, the rootkit keeps it hidden. I also found that there are multiple types of rootkits/backdoors:</p>
 
     <img src="images/44.png" alt="Ghidra" width="650" height="300" />
-    <p><strong>BIOS/UEFI/initrd Backdoors:</strong><br>
-        These are the most dangerous as they are installed at the BIOS level, allowing them to bypass standard security measures and even survive a complete reinstallation of the operating system. Removing them typically requires reflashing the BIOS.
-    </p>
-
-    <p><strong>User-Level Backdoors:</strong><br>
-        These are the most common and include techniques like:<br>
-        Modified Binaries: altering programs to allow login with a secret password.<br>
-        Reverse Shells: using scripts, such as those written with Netcat, to open a shell back to an attacker's system.<br>
-        Cron Jobs: scheduling tasks to re-establish a reverse shell or execute malicious commands.<br>
-        Malicious Aliases: editing <code>.bashrc</code> files to create aliases that spawn a shell.
-    </p>
-
-    <p><strong>Kernel-Level Backdoors:</strong><br>
-        These are more advanced and involve modifying the Linux kernel to hide processes. Because they operate with the highest privileges, they are much harder to detect. Examples of kernel-level rootkits include Adore-Ng and Diamorphine.
-    </p>
 
     <p><strong>First Steps</strong><br>
         And this challenge is a kernel level one. I downloaded the zip file, unzipped it and opened it in Ghidra, and beside that I used Netcat to connect to the IP address.<br>
