@@ -38,54 +38,54 @@ I was given an IP address, a port and a zip file. The goal was to disarm a custo
 
     <p><strong>First Steps</strong><br>
         And this challenge is a kernel level one. I downloaded the zip file, unzipped it and opened it in Ghidra, and beside that I used Netcat to connect to the IP address.<br>
-        The first thing I did was launch <code>file file.name</code> to see the nature of the file: it's an ELF (a kernel module .ko).<br>
+        The first thing I did was launch <span style="color: #0f0;">file file.name</span> to see the nature of the file: it's an ELF (a kernel module .ko).<br>
         Then I looked inside and I found that it's a Diamorphine rootkit. I didn't know about it, so I researched and found the GitHub repo:<br>
-        <strong>https://github.com/m0nad/Diamorphine</strong>
+         <span style="color: #0f0;"><strong>https://github.com/m0nad/Diamorphine</strong></span><br>
     </p>
 
     <p><strong>Understanding Rootkit Behavior</strong><br>
         Observations from the README (uninstall instructions):<br>
         The module starts hidden.<br>
         To make it visible, we need to use:<br>
-        kill -63 0<br>
+        <span style="color: #0f0;">kill -63 0</span><br>
         Once visible, we can remove it with:<br>
-        rmmod diamorphine
+        <span style="color: #0f0;">rmmod diamorphine</span>
     </p>
 
     <p><strong>A Problem Appears</strong><br>
-        I attempted kill -63 0 to make the module visible.<br>
+        I attempted <span style="color: #0f0;">kill -63 0</span> to make the module visible.<br>
         The system crashed (Kernel Panic), which means the original Diamorphine code was probably modified.
     </p>
 
     <p><strong>Finding the Modified Kill Switch</strong><br>
         I went back to Ghidra and searched for cmp instructions in hacked_kill().<br>
         I noticed multiple cmp instructions:<br>
-        cmp eax, 0x40 (corresponds to kill -64 for root access)<br>
-        cmp eax, 0x2E (new visibility toggle, corresponds to kill -46)<br>
-        Testing kill -64 0 gives root access, so the attacker modified the rootkit to use different signals.
+        <span style="color: #0f0;">cmp eax, 0x40</span> (corresponds to kill -64 for root access)<br>
+        <span style="color: #0f0;">cmp eax, 0x2E</span> (new visibility toggle, corresponds to kill -46)<br>
+        Testing <span style="color: #0f0;">kill -64 0</span> gives root access, so the attacker modified the rootkit to use different signals.
     </p>
     <img src="images/33.png" alt="Ghidra" width="800" height="800" />
 
     <p><strong>Removing the Rootkit</strong><br>
         Gain root access:<br>
-        kill -64 0<br>
-        whoami # Should return "root"<br>
+        <span style="color: #0f0;">kill -64 0</span><br>
+        <span style="color: #0f0;">whoami</span> # Should return "root"<br>
         <p style="margin-bottom: 1em;"></p>
         Make the rootkit visible:<br>
-        kill -46 0<br>
+        <span style="color: #0f0;">kill -46 0</span><br>
         <p style="margin-bottom: 1em;"></p>
         Remove the rootkit:<br>
-        rmmod diamorphine<br>
+        <span style="color: #0f0;">rmmod diamorphine</span><br>
         <p style="margin-bottom: 1em;"></p>
         Confirm its removal:<br>
-        lsmod | grep diamorphine # Should return nothing
+        <span style="color: #0f0;">lsmod | grep diamorphine</span> # Should return nothing
     </p>
 
     <p><strong>Finding the Flag</strong><br>
         Search the system for .txt files:<br>
-        find / -type f -name "*.txt" 2>/dev/null<br>
+        <span style="color: #0f0;">find / -type f -name "*.txt" 2>/dev/null</span><br>
         Retrieve the flag:<br>
-        cat /path/to/flag.txt
+        <span style="color: #0f0;">cat /path/to/flag.txt</span>
     </p>
 
     <p><strong>Flag found</strong> :]</p>
