@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="../images/icone.jpg" type="image/png">
+  <title>CTF - ROOTKIT</title>
+  <link rel="stylesheet" href="../stylr.css" />
+</head>
+<body>
+  <div class="project-container">
+    <h3>This challenge is about a backdoor on Linux, so it's my first time doing this type of challenge about the Linux kernel.
+I was given an IP address, a port and a zip file. The goal was to disarm a custom rootkit and find the hidden data.</h3>
+    <style>
+    h3 {
+      font-family: 'Courier New', monospace;
+      color: #00e5c8;
+    }
+  </style>
+
+    <p>So I searched a bit and I found that there are multiple types of rootkits (a rootkit is a kind of backdoor):</p>
+
+    <p><strong>BIOS/UEFI/initrd Backdoors:</strong><br>
+        These are the most dangerous as they are installed at the BIOS level, allowing them to bypass standard security measures and even survive a complete reinstallation of the operating system. Removing them typically requires reflashing the BIOS.
+    </p>
+
+    <p><strong>User-Level Backdoors:</strong><br>
+        These are the most common and include techniques like:<br>
+        Modified Binaries: altering programs to allow login with a secret password.<br>
+        Reverse Shells: using scripts, such as those written with Netcat, to open a shell back to an attacker's system.<br>
+        Cron Jobs: scheduling tasks to re-establish a reverse shell or execute malicious commands.<br>
+        Malicious Aliases: editing <code>.bashrc</code> files to create aliases that spawn a shell.
+    </p>
+
+    <p><strong>Kernel-Level Backdoors:</strong><br>
+        These are more advanced and involve modifying the Linux kernel to hide processes. Because they operate with the highest privileges, they are much harder to detect. Examples of kernel-level rootkits include Adore-Ng and Diamorphine.
+    </p>
+
+    <p><strong>First Steps</strong><br>
+        And this challenge is a kernel level one. I downloaded the zip file, unzipped it and opened it in Ghidra, and beside that I used Netcat to connect to the IP address.<br>
+        The first thing I did was launch <code>file file.name</code> to see the nature of the file: it's an ELF (a kernel module .ko).<br>
+        Then I looked inside and I found that it's a Diamorphine rootkit. I didn't know about it, so I researched and found the GitHub repo:<br>
+        https://github.com/m0nad/Diamorphine
+    </p>
+
+    <p><strong>Understanding Rootkit Behavior</strong><br>
+        Observations from the README (uninstall instructions):<br>
+        The module starts hidden.<br>
+        To make it visible, we need to use:<br>
+        kill -63 0<br>
+        Once visible, we can remove it with:<br>
+        rmmod diamorphine
+    </p>
+
+    <p><strong>A Problem Appears</strong><br>
+        I attempted kill -63 0 to make the module visible.<br>
+        The system crashed (Kernel Panic), which means the original Diamorphine code was probably modified.
+    </p>
+
+    <p><strong>Finding the Modified Kill Switch</strong><br>
+        I went back to Ghidra and searched for cmp instructions in hacked_kill().<br>
+        I noticed multiple cmp instructions:<br>
+        cmp eax, 0x40 (corresponds to kill -64 for root access)<br>
+        cmp eax, 0x2E (new visibility toggle, corresponds to kill -46)<br>
+        Testing kill -64 0 gives root access, so the attacker modified the rootkit to use different signals.
+    </p>
+
+    <p><strong>Removing the Rootkit</strong><br>
+        Gain root access:<br>
+        kill -64 0<br>
+        whoami # Should return "root"<br>
+        <p style="margin-bottom: 1em;"></p>
+        Make the rootkit visible:<br>
+        kill -46 0<br>
+        <p style="margin-bottom: 1em;"></p>
+        Remove the rootkit:<br>
+        rmmod diamorphine<br>
+        <p style="margin-bottom: 1em;"></p>
+        Confirm its removal:<br>
+        lsmod | grep diamorphine # Should return nothing
+    </p>
+
+    <p><strong>Finding the Flag</strong><br>
+        Search the system for .txt files:<br>
+        find / -type f -name "*.txt" 2>/dev/null<br>
+        Retrieve the flag:<br>
+        cat /path/to/flag.txt
+    </p>
+
+    <p><strong>Boom! Flag found</strong> :]</p>
+
+    <a href="../index.html" class="back" style="color:#00e5c8; text-shadow:0 0 5px #00e5c8; transition:0.3s;">← Back Home</a>
+  </div>
+</body>
+</html>
