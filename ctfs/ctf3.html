@@ -19,13 +19,22 @@ I was given an IP address, a port and a zip file. The goal was to disarm a custo
 
     <p>So I searched a bit and I found that a rootkit is malware designed to hide its own presence (and often an attacker's access) on a system. It is frequently used together with a backdoor: the backdoor gives the access, the rootkit keeps it hidden. I also found that there are multiple types of rootkits/backdoors:</p>
 
-    <img src="images/44.png" alt="Ghidra" width="600" height="300" />
+    <img src="images/44.png" alt="Ghidra" width="500" height="350" />
 
     <p><strong>First Steps</strong><br>
         And this challenge is a kernel level one. I downloaded the zip file, unzipped it and opened it in Ghidra, and beside that I used Netcat to connect to the IP address.<br>
         The first thing I did was launch <span style="color: #0f0;">file file.name</span> to see the nature of the file: it's an ELF (a kernel module .ko).<br>
-        Then I looked inside and I found that it's a Diamorphine rootkit. I didn't know about it, so I researched and found the GitHub repo:<br>
+        Then I looked inside and I found that it's a Diamorphine rootkit. I didn't know about it, so I did some research online. I found its GitHub repo and a few write-ups about similar challenges, which helped me understand how this kind of rootkit works:<br>
          <span style="color: #0f0;"><strong>https://github.com/m0nad/Diamorphine</strong></span><br>
+    </p>
+
+    <p><strong>What is Diamorphine?</strong><br>
+        Diamorphine is a well-known open-source LKM (Loadable Kernel Module) rootkit for Linux. Once loaded into the kernel, it does two main things:<br>
+        It hides itself, so it doesn't show up in <span style="color: #0f0;">lsmod</span>, and it can also hide files, processes and other kernel modules.<br>
+        It gives a secret way to become root. Since a hidden module can't be controlled normally, the attacker communicates with it by sending special signals with the <span style="color: #0f0;">kill</span> command. Each signal number acts like a hidden command:<br>
+        <span style="color: #0f0;">kill -63 &lt;pid&gt;</span> toggles the module visibility (show/hide).<br>
+        <span style="color: #0f0;">kill -64 &lt;pid&gt;</span> gives root privileges to the process.<br>
+        This is exactly why the <span style="color: #0f0;">kill</span> syscall is hijacked: in the source code, the function that intercepts these signals is <span style="color: #0f0;">hacked_kill()</span>. That's the function I'll be looking at in Ghidra later.
     </p>
 
     <p><strong>Understanding Rootkit Behavior</strong><br>
@@ -46,8 +55,8 @@ I was given an IP address, a port and a zip file. The goal was to disarm a custo
         I went back to Ghidra and searched for cmp instructions in hacked_kill().<br>
         I noticed multiple cmp instructions:<br>
         <span style="color: #0f0;">cmp eax, 0x40</span> (corresponds to kill -64 for root access)<br>
-        <span style="color: #0f0;">cmp eax, 0x2E</span> (new visibility toggle, corresponds to kill -46)<br>
-        Testing <span style="color: #0f0;">kill -64 0</span> gives root access, so the attacker modified the rootkit to use different signals.
+        <span style="color: #0f0;">cmp eax, 0x2E</span> (modified visibility toggle, corresponds to kill -46 instead of the original 63)<br>
+        Testing <span style="color: #0f0;">kill -64 0</span> gives root access, and the attacker changed the visibility signal, so I had to use the new value I found in Ghidra.
     </p>
     <img src="images/33.png" alt="Ghidra" width="800" height="800" />
 
